@@ -40,6 +40,8 @@ import io.nekohasekai.sagernet.fmt.V2rayBuildResult
 import io.nekohasekai.sagernet.fmt.brook.BrookBean
 import io.nekohasekai.sagernet.fmt.brook.internalUri
 import io.nekohasekai.sagernet.fmt.buildV2RayConfig
+import io.nekohasekai.sagernet.fmt.gost.GostBean
+import io.nekohasekai.sagernet.fmt.gost.buildGostArgs
 import io.nekohasekai.sagernet.fmt.hysteria.HysteriaBean
 import io.nekohasekai.sagernet.fmt.hysteria.buildHysteriaConfig
 import io.nekohasekai.sagernet.fmt.internal.ConfigBean
@@ -404,6 +406,28 @@ abstract class V2RayInstance(
                             configFile.absolutePath,
                         )
 
+                        processes.start(commands, env)
+                    }
+                    bean is GostBean -> {
+                        val gostBin = File(
+                            SagerNet.application.applicationInfo.nativeLibraryDir, "libgost.so"
+                        ).absolutePath
+
+                        var privateKeyPath: String? = null
+                        if (bean.authType == GostBean.AUTH_TYPE_PRIVATE_KEY && bean.privateKey.isNotBlank()) {
+                            privateKeyPath = File(
+                                context.noBackupFilesDir,
+                                "gost_key_" + SystemClock.elapsedRealtime()
+                            ).apply {
+                                parentFile?.mkdirs()
+                                writeText(bean.privateKey)
+                                cacheFiles.add(this)
+                            }.absolutePath
+                        }
+
+                        val commands = bean.buildGostArgs(port, gostBin, privateKeyPath)
+
+                        Logs.i("gost starting: ${commands.joinToString(" ")}")
                         processes.start(commands, env)
                     }
                 }

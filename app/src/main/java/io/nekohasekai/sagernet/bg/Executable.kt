@@ -38,6 +38,7 @@ object Executable {
         "libhysteria.so",
         "libpingtunnel.so",
         "librelaybaton.so",
+        "libgost.so",
     )
 
     fun killAll() {

@@ -32,6 +32,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ArrayUtil;
 import io.nekohasekai.sagernet.database.SubscriptionBean;
 import io.nekohasekai.sagernet.fmt.brook.BrookBean;
+import io.nekohasekai.sagernet.fmt.gost.GostBean;
 import io.nekohasekai.sagernet.fmt.http.HttpBean;
 import io.nekohasekai.sagernet.fmt.hysteria.HysteriaBean;
 import io.nekohasekai.sagernet.fmt.internal.BalancerBean;
@@ -164,6 +165,12 @@ public class KryoConverters {
     public static SSHBean sshDeserialize(byte[] bytes) {
         if (ArrayUtil.isEmpty(bytes)) return null;
         return deserialize(new SSHBean(), bytes);
+    }
+
+    @TypeConverter
+    public static GostBean gostDeserialize(byte[] bytes) {
+        if (ArrayUtil.isEmpty(bytes)) return null;
+        return deserialize(new GostBean(), bytes);
     }
 
     @TypeConverter

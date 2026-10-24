@@ -213,6 +213,7 @@
     <string name="action_brook" translatable="false">Brook</string>
     <string name="action_hysteria" translatable="false">Hysteria</string>
     <string name="action_ssh" translatable="false">SSH</string>
+    <string name="action_gost" translatable="false">GOST</string>
     <string name="action_wireguard" translatable="false">WireGuard</string>
     <string name="action_mieru" translatable="false">Mieru</string>
     <string name="action_tuic" translatable="false">TUIC</string>

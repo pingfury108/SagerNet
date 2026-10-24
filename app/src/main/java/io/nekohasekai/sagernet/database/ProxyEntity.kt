@@ -35,6 +35,7 @@ import io.nekohasekai.sagernet.fmt.KryoConverters
 import io.nekohasekai.sagernet.fmt.Serializable
 import io.nekohasekai.sagernet.fmt.brook.BrookBean
 import io.nekohasekai.sagernet.fmt.buildV2RayConfig
+import io.nekohasekai.sagernet.fmt.gost.GostBean
 import io.nekohasekai.sagernet.fmt.http.HttpBean
 import io.nekohasekai.sagernet.fmt.http.toUri
 import io.nekohasekai.sagernet.fmt.hysteria.HysteriaBean
@@ -107,6 +108,7 @@ data class ProxyEntity(
     var tuicBean: TuicBean? = null,
     var sshBean: SSHBean? = null,
     var wgBean: WireGuardBean? = null,
+    var gostBean: GostBean? = null,
     var configBean: ConfigBean? = null,
     var chainBean: ChainBean? = null,
     var balancerBean: BalancerBean? = null
@@ -131,6 +133,7 @@ data class ProxyEntity(
         const val TYPE_WG = 18
         const val TYPE_MIERU = 19
         const val TYPE_TUIC = 20
+        const val TYPE_GOST = 21
 
         const val TYPE_CHAIN = 8
         const val TYPE_BALANCER = 14
@@ -223,6 +226,7 @@ data class ProxyEntity(
             TYPE_HYSTERIA -> hysteriaBean = KryoConverters.hysteriaDeserialize(byteArray)
             TYPE_SSH -> sshBean = KryoConverters.sshDeserialize(byteArray)
             TYPE_WG -> wgBean = KryoConverters.wireguardDeserialize(byteArray)
+            TYPE_GOST -> gostBean = KryoConverters.gostDeserialize(byteArray)
             TYPE_MIERU -> mieruBean = KryoConverters.mieruDeserialize(byteArray)
             TYPE_TUIC -> tuicBean = KryoConverters.tuicDeserialize(byteArray)
 
@@ -251,6 +255,7 @@ data class ProxyEntity(
         TYPE_WG -> "WireGuard"
         TYPE_MIERU -> "Mieru"
         TYPE_TUIC -> "TUIC"
+        TYPE_GOST -> "GOST"
 
         TYPE_CHAIN -> chainName
         TYPE_CONFIG -> configName
@@ -280,6 +285,7 @@ data class ProxyEntity(
             TYPE_WG -> wgBean
             TYPE_MIERU -> mieruBean
             TYPE_TUIC -> tuicBean
+            TYPE_GOST -> gostBean
 
             TYPE_CONFIG -> configBean
             TYPE_CHAIN -> chainBean
@@ -298,7 +304,8 @@ data class ProxyEntity(
 
     fun haveStandardLink(): Boolean {
         return haveLink() && when (type) {
-            TYPE_RELAY_BATON, TYPE_BROOK, TYPE_SSH, TYPE_WG, TYPE_HYSTERIA, TYPE_MIERU, TYPE_TUIC -> false
+            TYPE_RELAY_BATON, TYPE_BROOK, TYPE_SSH, TYPE_WG, TYPE_HYSTERIA, TYPE_MIERU, TYPE_TUIC,
+            TYPE_GOST -> false
             TYPE_CONFIG -> false
             else -> true
         }
@@ -401,6 +408,7 @@ data class ProxyEntity(
             TYPE_BROOK -> true
             TYPE_MIERU -> true
             TYPE_TUIC -> true
+            TYPE_GOST -> true
 
             TYPE_CONFIG -> true
             else -> false
@@ -523,6 +531,10 @@ data class ProxyEntity(
                 type = TYPE_TUIC
                 tuicBean = bean
             }
+            is GostBean -> {
+                type = TYPE_GOST
+                gostBean = bean
+            }
 
             is ConfigBean -> {
                 type = TYPE_CONFIG
@@ -561,6 +573,7 @@ data class ProxyEntity(
                 TYPE_WG -> WireGuardSettingsActivity::class.java
                 TYPE_MIERU -> MieruSettingsActivity::class.java
                 TYPE_TUIC -> TuicSettingsActivity::class.java
+                TYPE_GOST -> GostSettingsActivity::class.java
 
                 TYPE_CONFIG -> ConfigSettingsActivity::class.java
                 TYPE_CHAIN -> ChainSettingsActivity::class.java
