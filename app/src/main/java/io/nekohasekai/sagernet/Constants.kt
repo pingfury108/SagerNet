@@ -147,6 +147,7 @@ object Key {
     const val SERVER_ALLOW_INSECURE = "serverAllowInsecure"
 
     const val SERVER_AUTH_TYPE = "serverAuthType"
+    const val GOST_MODE = "gostMode"
     const val SERVER_UPLOAD_SPEED = "serverUploadSpeed"
     const val SERVER_DOWNLOAD_SPEED = "serverDownloadSpeed"
     const val SERVER_STREAM_RECEIVE_WINDOW = "serverStreamReceiveWindow"

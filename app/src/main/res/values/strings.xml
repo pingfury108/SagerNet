@@ -214,6 +214,10 @@
     <string name="action_hysteria" translatable="false">Hysteria</string>
     <string name="action_ssh" translatable="false">SSH</string>
     <string name="action_gost" translatable="false">GOST</string>
+    <string name="gost_mode" translatable="false">Mode</string>
+    <string name="gost_mode_relay_ssh" translatable="false">relay+ssh</string>
+    <string name="gost_mode_socks5_ssh" translatable="false">socks5+ssh</string>
+    <string name="gost_mode_ssh" translatable="false">ssh</string>
     <string name="action_wireguard" translatable="false">WireGuard</string>
     <string name="action_mieru" translatable="false">Mieru</string>
     <string name="action_tuic" translatable="false">TUIC</string>

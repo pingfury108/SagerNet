@@ -38,6 +38,7 @@ class GostSettingsActivity : ProfileSettingsActivity<GostBean>() {
         DataStore.serverAddress = serverAddress
         DataStore.serverPort = serverPort
         DataStore.serverUsername = username
+        DataStore.gostMode = mode
         DataStore.serverAuthType = authType
         DataStore.serverPassword = password
         DataStore.serverPrivateKey = privateKey
@@ -49,6 +50,7 @@ class GostSettingsActivity : ProfileSettingsActivity<GostBean>() {
         serverAddress = DataStore.serverAddress
         serverPort = DataStore.serverPort
         username = DataStore.serverUsername
+        mode = DataStore.gostMode
         authType = DataStore.serverAuthType
         when (authType) {
             GostBean.AUTH_TYPE_NONE -> {

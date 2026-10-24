@@ -623,6 +623,12 @@
         <item>@string/ssh_public_key</item>
     </string-array>
 
+    <string-array name="gost_mode">
+        <item>@string/gost_mode_relay_ssh</item>
+        <item>@string/gost_mode_socks5_ssh</item>
+        <item>@string/gost_mode_ssh</item>
+    </string-array>
+
     <string-array name="tun_implementation">
         <item>gVisor</item>
         <item>System</item>

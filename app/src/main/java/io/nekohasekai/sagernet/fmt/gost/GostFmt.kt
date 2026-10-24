@@ -26,7 +26,15 @@ private fun urlEncode(value: String): String {
     return URLEncoder.encode(value, "UTF-8").replace("+", "%20")
 }
 
-// gost local socks -> relay+ssh forward
+private fun GostBean.scheme(): String {
+    return when (mode) {
+        GostBean.MODE_SOCKS5_SSH -> "socks5+ssh"
+        GostBean.MODE_SSH -> "ssh"
+        else -> "relay+ssh"
+    }
+}
+
+// gost local socks -> ssh forward (relay+ssh / socks5+ssh / ssh)
 // e.g. gost -L socks5://127.0.0.1:1080 -F relay+ssh://user:pass@host:22
 fun GostBean.buildGostArgs(port: Int, gostPath: String, privateKeyPath: String?): List<String> {
     val userInfo = when (authType) {
@@ -34,7 +42,8 @@ fun GostBean.buildGostArgs(port: Int, gostPath: String, privateKeyPath: String?)
         else -> urlEncode(username ?: "")
     }
 
-    val forward = StringBuilder("relay+ssh://")
+    val forward = StringBuilder(scheme())
+        .append("://")
         .append(userInfo)
         .append("@")
         .append(serverAddress)

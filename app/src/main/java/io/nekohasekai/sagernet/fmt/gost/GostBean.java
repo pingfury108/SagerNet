@@ -31,7 +31,11 @@ import io.nekohasekai.sagernet.fmt.KryoConverters;
 
 public class GostBean extends AbstractBean {
 
-    // v1: relay+ssh only
+    // gost client mode: forward protocol over ssh transport
+    public static final int MODE_RELAY_SSH = 0;
+    public static final int MODE_SOCKS5_SSH = 1;
+    public static final int MODE_SSH = 2;
+
     public static final int AUTH_TYPE_NONE = 0;
     public static final int AUTH_TYPE_PASSWORD = 1;
     public static final int AUTH_TYPE_PRIVATE_KEY = 2;
@@ -41,6 +45,7 @@ public class GostBean extends AbstractBean {
     public String password;
     public String privateKey;
     public String privateKeyPassphrase;
+    public Integer mode;
 
     @Override
     public void initializeDefaultValues() {
@@ -53,11 +58,12 @@ public class GostBean extends AbstractBean {
         if (password == null) password = "";
         if (privateKey == null) privateKey = "";
         if (privateKeyPassphrase == null) privateKeyPassphrase = "";
+        if (mode == null) mode = MODE_RELAY_SSH;
     }
 
     @Override
     public void serialize(ByteBufferOutput output) {
-        output.writeInt(0);
+        output.writeInt(1);
         super.serialize(output);
         output.writeString(username);
         output.writeInt(authType);
@@ -72,6 +78,7 @@ public class GostBean extends AbstractBean {
                 output.writeString(privateKeyPassphrase);
                 break;
         }
+        output.writeInt(mode);
     }
 
     @Override
@@ -90,6 +97,11 @@ public class GostBean extends AbstractBean {
                 privateKey = input.readString();
                 privateKeyPassphrase = input.readString();
                 break;
+        }
+        if (version >= 1) {
+            mode = input.readInt();
+        } else {
+            mode = MODE_RELAY_SSH;
         }
     }
 
