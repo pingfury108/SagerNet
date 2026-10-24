@@ -13,11 +13,17 @@ fun Project.downloadAssets() {
     val assets = File(projectDir, "src/main/assets")
     val downloader = OkHttpClient.Builder().followRedirects(true).followSslRedirects(true).build()
 
-    val github = GitHubBuilder().build()
-    val geoip = github.getRepository("v2fly/geoip").latestRelease
+    val github by lazy { GitHubBuilder().build() }
+
+    val geoip = if (File(assets, "v2ray/geoip.version.txt").isFile) {
+        // pre-provisioned assets (offline build): skip GitHub API
+        null
+    } else {
+        github.getRepository("v2fly/geoip").latestRelease
+    }
     val geoipFile = File(assets, "v2ray/geoip.dat.xz")
     val geoipVersion = File(assets, "v2ray/geoip.version.txt")
-    if (!geoipVersion.isFile || geoipVersion.readText() != geoip.tagName) {
+    if (geoip != null) {
         geoipVersion.deleteRecursively()
         geoipFile.parentFile.mkdirs()
 
@@ -81,10 +87,14 @@ fun Project.downloadAssets() {
         }
     }
 
-    val geosite = github.getRepository("v2fly/domain-list-community").latestRelease
+    val geosite = if (File(assets, "v2ray/geosite.version.txt").isFile) {
+        null
+    } else {
+        github.getRepository("v2fly/domain-list-community").latestRelease
+    }
     val geositeFile = File(assets, "v2ray/geosite.dat.xz")
     val geositeVersion = File(assets, "v2ray/geosite.version.txt")
-    if (!geositeVersion.isFile || geositeVersion.readText() != geosite.tagName) {
+    if (geosite != null) {
         geositeVersion.deleteRecursively()
 
         val geositeDat = (geosite.listAssets().toSet().find { it.name == "dlc.dat.xz" }
