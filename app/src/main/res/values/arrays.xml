@@ -627,6 +627,14 @@
         <item>@string/gost_mode_relay_ssh</item>
         <item>@string/gost_mode_socks5_ssh</item>
         <item>@string/gost_mode_ssh</item>
+        <item>@string/gost_mode_sshd</item>
+    </string-array>
+
+    <string-array name="gost_mode_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="tun_implementation">

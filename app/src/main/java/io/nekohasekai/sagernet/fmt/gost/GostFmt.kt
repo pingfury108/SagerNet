@@ -30,6 +30,7 @@ private fun GostBean.scheme(): String {
     return when (mode) {
         GostBean.MODE_SOCKS5_SSH -> "socks5+ssh"
         GostBean.MODE_SSH -> "ssh"
+        GostBean.MODE_SSHD -> "sshd"
         else -> "relay+ssh"
     }
 }

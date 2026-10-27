@@ -26,7 +26,7 @@
 
         <com.takisoft.preferencex.SimpleMenuPreference
             app:entries="@array/gost_mode"
-            app:entryValues="@array/int_array_3"
+            app:entryValues="@array/gost_mode_value"
             app:icon="@drawable/ic_baseline_compare_arrows_24"
             app:key="gostMode"
             app:title="@string/gost_mode"

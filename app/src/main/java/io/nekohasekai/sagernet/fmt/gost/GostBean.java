@@ -35,6 +35,7 @@ public class GostBean extends AbstractBean {
     public static final int MODE_RELAY_SSH = 0;
     public static final int MODE_SOCKS5_SSH = 1;
     public static final int MODE_SSH = 2;
+    public static final int MODE_SSHD = 3;
 
     public static final int AUTH_TYPE_NONE = 0;
     public static final int AUTH_TYPE_PASSWORD = 1;
