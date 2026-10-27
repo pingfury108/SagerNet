@@ -27,7 +27,7 @@
 	url = https://github.com/HyNetwork/hysteria
 [submodule "library/core"]
 	path = library/core
-	url = https://github.com/SagerNet/LibSagerNetCore
+	url = https://github.com/pingfury108/LibSagerNetCore
 [submodule "external/termux-view"]
 	path = external/termux-view
 	url = https://github.com/SagerNet/termux-view
