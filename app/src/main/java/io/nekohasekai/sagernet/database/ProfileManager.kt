@@ -201,7 +201,19 @@ object ProfileManager {
                 RuleEntity(
                     name = app.getString(R.string.route_opt_block_ads),
                     domains = "geosite:category-ads-all",
-                    outbound = -2
+                    outbound = -2,
+                    enabled = true,
+                )
+            )
+            // ads-pool ships inside the bundled geosite.dat: anti-AD + EasyList
+            // China + brave/adblock-lists host block list, far better CN SDK
+            // coverage than category-ads-all alone
+            createRule(
+                RuleEntity(
+                    name = app.getString(R.string.route_opt_block_ads_pool),
+                    domains = "geosite:ads-pool",
+                    outbound = -2,
+                    enabled = true,
                 )
             )
             createRule(

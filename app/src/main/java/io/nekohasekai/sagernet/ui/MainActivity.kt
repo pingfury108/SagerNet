@@ -102,6 +102,13 @@ class MainActivity : ThemedActivity(),
         connection.connect(this, this)
         DataStore.configurationStore.registerChangeListener(this)
 
+        // materialize the default route rules on first launch (otherwise they are
+        // only created when the route page is opened, so a fresh install has no
+        // rules at all and every connection falls back to the default outbound)
+        runOnDefaultDispatcher {
+            ProfileManager.getRules()
+        }
+
         if (intent?.action == Intent.ACTION_VIEW) {
             onNewIntent(intent)
         }

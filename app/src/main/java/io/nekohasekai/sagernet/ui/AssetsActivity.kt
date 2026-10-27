@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import cn.hutool.json.JSONObject
 import com.google.android.material.snackbar.Snackbar
+import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.databinding.LayoutAssetItemBinding
@@ -274,15 +275,26 @@ class AssetsActivity : ThemedActivity() {
     suspend fun updateAsset(file: File, versionFile: File, localVersion: String) {
         val repo: String
         var fileName = file.name
-        if (DataStore.rulesProvider == 0) {
-            if (file.name == internalFiles[0]) {
-                repo = "v2fly/geoip"
-            } else {
-                repo = "v2fly/domain-list-community"
-                fileName = "dlc.dat.xz"
+        when (DataStore.rulesProvider) {
+            0 -> {
+                if (file.name == internalFiles[0]) {
+                    repo = "v2fly/geoip"
+                } else {
+                    repo = "v2fly/domain-list-community"
+                    fileName = "dlc.dat.xz"
+                }
             }
-        } else {
-            repo = "Loyalsoldier/v2ray-rules-dat"
+            1 -> {
+                repo = "Loyalsoldier/v2ray-rules-dat"
+            }
+            else -> {
+                // self-hosted release (see .github/workflows/rules-dat.yml):
+                // contains geoip.dat and dlc.dat.xz, geosite carries ads-pool
+                repo = Key.RULES_REPO
+                if (file.name != internalFiles[0]) {
+                    fileName = "dlc.dat.xz"
+                }
+            }
         }
 
         val client = Libcore.newHttpClient().apply {

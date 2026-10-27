@@ -82,6 +82,10 @@ object Key {
     const val SECURITY_ADVISORY = "securityAdvisory"
     const val TCP_KEEP_ALIVE_INTERVAL = "tcpKeepAliveInterval"
     const val RULES_PROVIDER = "rulesProvider"
+    // Self-hosted rules dat repo (owner/name); release assets must contain
+    // geoip.dat and dlc.dat.xz. Built weekly by .github/workflows/rules-dat.yml
+    // The same dat is also bundled into the APK (assets/v2ray/geosite.dat.xz).
+    const val RULES_REPO = "pingfury108/SagerNet"
     const val ENABLE_LOG = "enableLog"
 
     const val ALWAYS_SHOW_ADDRESS = "alwaysShowAddress"

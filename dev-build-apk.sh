@@ -16,4 +16,13 @@ ndk.dir=$ANDROID_HOME/ndk/25.0.8775105
 EOF
 fi
 
+# app/src/main/assets/v2ray is gitignored, so the bundled rules dat lives in
+# rules/ and is copied in here (keeps the APK self-contained: install = working)
+if [ -f rules/geosite.dat.xz ]; then
+  mkdir -p app/src/main/assets/v2ray
+  cp -f rules/geosite.dat.xz app/src/main/assets/v2ray/geosite.dat.xz
+  cp -f rules/geosite.version.txt app/src/main/assets/v2ray/geosite.version.txt
+  echo ">> bundled rules dat: $(cat rules/geosite.version.txt)"
+fi
+
 ./gradlew "$@" app:assembleOssDebug

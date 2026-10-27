@@ -108,7 +108,10 @@ class SagerNet : Application(),
             filesDir.absolutePath + "/",
             externalAssets.absolutePath + "/",
             "v2ray/",
-            { DataStore.rulesProvider == 0 },
+            // 0 = official, 1 = Loyalsoldier, 2 = self-hosted (bundled + own releases):
+            // compare bundled asset version against the extracted copy so APK
+            // updates can refresh the dat, while newer downloaded dats win
+            { DataStore.rulesProvider != 1 },
             { DataStore.providerRootCA == RootCAProvider.SYSTEM },
             isMainProcess
         )

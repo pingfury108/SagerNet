@@ -1,0 +1,72 @@
+name: Rules dat (ad-block geosite)
+
+# Builds the self-hosted rules dat used by the app's
+# "Self-hosted (with ad-block)" route-asset provider:
+#   dlc.dat.xz  - official v2fly domain lists + ADS-POOL category
+#   geoip.dat   - official v2fly geoip, passed through
+# Published as a release on this repo, so the app can update itself
+# without a PC (Settings -> Route assets -> update).
+
+on:
+  schedule:
+    # weekly, Sunday 18:00 UTC (Monday 02:00 CST)
+    - cron: "0 18 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          # domain-list-community requires go >= 1.25
+          go-version: "1.25"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build dat
+        env:
+          MIRROR: ""            # direct github in CI
+          WORK: /tmp/ads
+          BRAVE: /tmp/brave-lists
+          DLC: /tmp/dlc
+        run: bash dev-ads-build.sh /tmp/out
+
+      - name: Show summary
+        run: |
+          cat /tmp/out/version.txt
+          cat /tmp/out/sha256sum.txt
+          python3 dev-parse-dat.py /tmp/out/geosite.dat | head -3
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="$(cat /tmp/out/version.txt)"
+          gh release create "$VERSION" \
+            /tmp/out/dlc.dat.xz \
+            /tmp/out/geoip.dat \
+            /tmp/out/sha256sum.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Rules $VERSION" \
+            --notes "auto-built: v2fly domain lists + anti-AD/EasyList-CN/Brave ad-block pool"
+
+      - name: Keep last 3 releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 \
+            --json tagName,createdAt --jq '.[3:] | .[].tagName' \
+            | while read -r tag; do
+                [ -n "$tag" ] && gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+              done

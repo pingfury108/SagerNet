@@ -3,6 +3,9 @@
 # current category-ads-all coverage.
 import re, sys, os, glob
 
+WORK = sys.argv[1] if len(sys.argv) > 1 else "/tmp/ads"
+BRAVE = sys.argv[2] if len(sys.argv) > 2 else "/tmp/brave-lists"
+
 pool = set()          # final candidate block domains
 whitelist = set()     # @@ whitelist domains (excluded from pool)
 cat = set()           # category-ads-all expanded plain domains
@@ -12,7 +15,7 @@ def norm(d):
     return d[:-1] if d.endswith(".") else d
 
 # --- category-ads-all (expanded cache from dev-ads-diff.py) ---
-cache = "/tmp/ads/dlc-cache"
+cache = os.path.join(WORK, "dlc-cache")
 files = {"category-ads-all"}
 seen = set()
 while files:
@@ -36,7 +39,7 @@ while files:
 
 # --- source 1: anti-AD ---
 anti = set()
-for line in open("/tmp/ads/antiad-domains.txt", encoding="utf-8", errors="ignore"):
+for line in open(os.path.join(WORK, "antiad-domains.txt"), encoding="utf-8", errors="ignore"):
     line = line.strip()
     if line and not line.startswith("#"):
         anti.add(norm(line))
@@ -69,7 +72,7 @@ def extract_adblock_domain(line):
 
 # --- source 2: EasyList China (||domain^ / plain ||) ---
 elc = set()
-for line in open("/tmp/ads/easylistchina.txt", encoding="utf-8", errors="ignore"):
+for line in open(os.path.join(WORK, "easylistchina.txt"), encoding="utf-8", errors="ignore"):
     line = line.strip()
     if line.startswith("@@"):
         continue
@@ -80,7 +83,7 @@ pool |= elc
 
 # --- source 3: brave/adblock-lists (convertible ||domain^; keep @@ as whitelist) ---
 brave = set()
-for f in glob.glob("/tmp/brave-lists/brave-lists/*.txt") + ["/tmp/brave-lists/brave-unbreak.txt"]:
+for f in glob.glob(os.path.join(BRAVE, "brave-lists/*.txt")) + [os.path.join(BRAVE, "brave-unbreak.txt")]:
     for line in open(f, encoding="utf-8", errors="ignore"):
         line = line.strip()
         if line.startswith("@@"):
@@ -107,6 +110,6 @@ print(f"  already in category-ads-all: {len(overlap_cat)}")
 print(f"  NEW vs category-ads-all:     {len(new_vs_cat)}")
 print(f"category-ads-all plain domains: {len(cat)} (pool misses {len(cat - pool)})")
 
-out = "/tmp/ads/final-pool.txt"
+out = os.path.join(WORK, "final-pool.txt")
 open(out, "w").write("\n".join(sorted(pool)))
 print("saved:", out, f"({os.path.getsize(out)/1048576:.1f} MB)")

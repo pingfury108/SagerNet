@@ -149,6 +149,8 @@
     <string name="route_assets">Assets</string>
     <string name="route_rules_provider">Rule Assets Provider</string>
     <string name="route_rules_official">Official</string>
+    <string name="route_rules_self_hosted">Self-hosted (with ad-block)</string>
+    <string name="route_opt_block_ads_pool">Block ads (ads-pool)</string>
     <string name="route_asset_status">Local version: %s</string>
     <string name="route_asset_no_update">No update</string>
     <string name="route_asset_updated">Updated</string>
