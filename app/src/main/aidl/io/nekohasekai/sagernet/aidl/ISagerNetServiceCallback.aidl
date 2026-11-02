@@ -13,4 +13,6 @@ oneway interface ISagerNetServiceCallback {
   void missingPlugin(String profileName, String pluginName);
   void routeAlert(int type, String routeName);
   void updateWakeLockStatus(boolean acquired);
+  // Batched connection events as a JSON array (see libcore/conns.go)
+  void connEvents(String events);
 }

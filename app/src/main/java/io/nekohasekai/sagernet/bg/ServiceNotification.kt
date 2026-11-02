@@ -123,6 +123,9 @@ class ServiceNotification(
             override fun routeAlert(type: Int, routeName: String?) {
             }
 
+            override fun connEvents(events: String) {
+            }
+
             override fun updateWakeLockStatus(acquired: Boolean) {
                 updateActions(acquired)
                 builder.priority = if (acquired) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_LOW

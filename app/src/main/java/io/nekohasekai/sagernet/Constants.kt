@@ -82,6 +82,7 @@ object Key {
     const val SECURITY_ADVISORY = "securityAdvisory"
     const val TCP_KEEP_ALIVE_INTERVAL = "tcpKeepAliveInterval"
     const val RULES_PROVIDER = "rulesProvider"
+    const val CONN_MONITOR = "connMonitor"
     // Self-hosted rules dat repo (owner/name); release assets must contain
     // geoip.dat and dlc.dat.xz. Built weekly by .github/workflows/rules-dat.yml
     // The same dat is also bundled into the APK (assets/v2ray/geosite.dat.xz).

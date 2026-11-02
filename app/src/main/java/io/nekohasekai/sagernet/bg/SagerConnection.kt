@@ -33,6 +33,7 @@ import io.nekohasekai.sagernet.SagerNet
 import io.nekohasekai.sagernet.aidl.*
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.ktx.runOnMainDispatcher
+import io.nekohasekai.sagernet.utils.ConnMonitor
 
 class SagerConnection(private var listenForDeath: Boolean = false) : ServiceConnection,
     IBinder.DeathRecipient {
@@ -116,6 +117,10 @@ class SagerConnection(private var listenForDeath: Boolean = false) : ServiceConn
         }
 
         override fun updateWakeLockStatus(acquired: Boolean) {
+        }
+
+        override fun connEvents(events: String) {
+            ConnMonitor.onEvents(events)
         }
     }
 

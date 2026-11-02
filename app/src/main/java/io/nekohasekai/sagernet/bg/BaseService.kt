@@ -47,6 +47,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import libcore.AppStats
 import libcore.ErrorHandler
+import libcore.ConnSink
 import libcore.Libcore
 import libcore.TrafficListener
 import java.net.UnknownHostException
@@ -409,6 +410,20 @@ class BaseService {
 
         val isVpnService get() = false
 
+        private fun installConnSink() {
+            if (!DataStore.connMonitor) {
+                Libcore.setConnSink(null)
+                return
+            }
+            Libcore.setConnSink(object : ConnSink {
+                override fun onConnEvents(events: String) {
+                    runOnDefaultDispatcher {
+                        data.binder.broadcast { it.connEvents(events) }
+                    }
+                }
+            })
+        }
+
         suspend fun startProcesses() {
             data.proxy!!.launch()
         }
@@ -555,6 +570,7 @@ class BaseService {
                     DataStore.currentProfile = profile.id
                     DataStore.startedProfile = profile.id
                     Libcore.enableConnectionPool()
+                    installConnSink()
                     startProcesses()
                     data.changeState(State.Connected)
                     data.binder.checkLoop()

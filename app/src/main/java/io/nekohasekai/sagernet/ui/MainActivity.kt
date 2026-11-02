@@ -339,6 +339,7 @@ class MainActivity : ThemedActivity(),
                 connection.trafficTimeout = connection.trafficTimeout
             }
             R.id.nav_tools -> displayFragment(ToolsFragment())
+            R.id.nav_connections -> displayFragment(ConnectionsFragment())
             R.id.nav_logcat -> displayFragment(LogcatFragment())
             R.id.nav_faq -> {
                 launchCustomTab("https://sagernet.org/")

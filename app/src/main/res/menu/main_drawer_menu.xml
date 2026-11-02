@@ -27,6 +27,10 @@
         android:id="@+id/misc"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_connections"
+            android:icon="@drawable/ic_baseline_transform_24"
+            android:title="@string/conn_title" />
+        <item
             android:id="@+id/nav_logcat"
             android:icon="@drawable/ic_baseline_bug_report_24"
             android:title="@string/menu_log" />

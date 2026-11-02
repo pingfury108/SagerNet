@@ -123,6 +123,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
 
     var securityAdvisory by configurationStore.boolean(Key.SECURITY_ADVISORY) { true }
     var rulesProvider by configurationStore.stringToInt(Key.RULES_PROVIDER) { 2 }
+    var connMonitor by configurationStore.boolean(Key.CONN_MONITOR) { true }
     var enableLog by configurationStore.boolean(Key.ENABLE_LOG) { BuildConfig.DEBUG }
     var enablePcap by configurationStore.boolean(Key.ENABLE_PCAP)
     var acquireWakeLock by configurationStore.boolean(Key.ACQUIRE_WAKE_LOCK)
